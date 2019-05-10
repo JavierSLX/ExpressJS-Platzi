@@ -1,0 +1,9 @@
+COMANDOS
+* npm init -y => Crea el package.json con todos los valores por default.
+* npm i -S #paquete# => Instala y guarda el paquete requerido.
+* npm i express-generator -g => Instala el generador de express automatico de manera general.
+* express --view=pug #PROYECTO# => Crea de manera automatica un proyecto de express
+
+
+NOTAS
+* Todos los callback son "error first", siempre regresan un error primero si este existe para analizarse.
