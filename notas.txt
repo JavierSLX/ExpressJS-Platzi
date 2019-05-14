@@ -7,3 +7,6 @@ COMANDOS
 
 NOTAS
 * Todos los callback son "error first", siempre regresan un error primero si este existe para analizarse.
+* Para usar Mongo se creo una cuenta en Mongo Atlas junto con un cluster
+* Conexion mongodb+srv://platzi:dVInC8vUvYqKafWn@curso-platzi-i0uq0.mongodb.net/octolion?retryWrites=true
+* Para leer los archivos .env se necesita instalar la libreria dotenv (Este ignora el archivo al momento de subirlo a GitHub)
