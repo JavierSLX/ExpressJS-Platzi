@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const ProductsService = require('../../services/products');
+const validation = require('../../utils/middlewares/validationHandler');
+const {productIdSchema, productTagSchema, createProductSchema, updateProductSchema} = require('../../utils/schemas/products');
 
 //Instanciamos el objeto
 const productsService = new ProductsService();
@@ -40,7 +42,8 @@ router.get('/:id', async (request, respond, next) => {
     
 });
 
-router.post('/', async (request, respond, next) => {
+//Usa un middleware para validar que el elemento del cuerpo venga correctamente
+router.post('/', validation(createProductSchema), async (request, respond, next) => {
     const {body: product} = request;
 
     try
@@ -55,7 +58,8 @@ router.post('/', async (request, respond, next) => {
     
 });
 
-router.put('/:id', async (request, respond, next) => {
+//Valida el id y el cuerpo de la peticion (Revisa primero el id en los parametros y despues el cuerpo del objeto a actualizar)
+router.put('/:id', validation({id: productIdSchema}, "params"), validation(updateProductSchema), async (request, respond, next) => {
     const {id} = request.params;
     const {body: product} = request;
 
