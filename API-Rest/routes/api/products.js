@@ -21,7 +21,7 @@ router.get('/', async (request, respond, next) => {
     
 });
 
-router.get('/:id', async (request, respond) => {
+router.get('/:id', async (request, respond, next) => {
 
     const {id} = request.params;
 
@@ -32,12 +32,12 @@ router.get('/:id', async (request, respond) => {
 
     }catch(error)
     {
-        
+        next(error);
     }
     
 });
 
-router.post('/', async (request, respond) => {
+router.post('/', async (request, respond, next) => {
     const {body: product} = request;
 
     try
@@ -47,12 +47,12 @@ router.post('/', async (request, respond) => {
 
     }catch(error)
     {
-        
+        next(error);
     }
     
 });
 
-router.put('/:id', async (request, respond) => {
+router.put('/:id', async (request, respond, next) => {
     const {id} = request.params;
     const {body: product} = request;
 
@@ -62,14 +62,13 @@ router.put('/:id', async (request, respond) => {
         respond.status(200).json({data: updateProduct, message: 'Product updated'});
     }catch(error)
     {
-        
+        next(error);
     }
     
 });
 
-router.delete('/:id', async (request, respond) => {
+router.delete('/:id', async (request, respond, next) => {
     const {id} = request.params;
-
     try
     {
         const product = await productsService.deleteProduct({id});
@@ -77,7 +76,7 @@ router.delete('/:id', async (request, respond) => {
 
     }catch(error)
     {
-        
+        next(error);
     }
     
 });

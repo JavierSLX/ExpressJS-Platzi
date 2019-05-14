@@ -1,4 +1,4 @@
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectID} = require('mongodb');
 const {config} = require('../config/index');
 
 const USER = encodeURIComponent(config.dbUser);
@@ -14,6 +14,7 @@ class MongoLib
         this.dbName = config.dbName;
     }
 
+    //Conecta a la base de datos de Mongo y regresa el cliente ya con la DB
     connect()
     {
         return new Promise((resolve, reject) => {
@@ -34,13 +35,73 @@ class MongoLib
         });
     }
 
+    //Regresa todos los documentos relacionados a la colección filtrados por un query
     getAll(collection, query)
     {
-        return this.connect().then(db => {
+        return new Promise((resolve, reject) => {
+            this.connect().then((db) => {
+                return db.collection(collection).find(query).toArray();
+            }).then((result) => {
+                resolve(result);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
 
-            return db.collection(collection).find(query).toArray();
-        }).catch(error => {
-            console.log(error);
+    //Obtiene un elemento por medio de su filtro
+    get(collection, id)
+    {
+        return new Promise((resolve, reject) => {
+            this.connect().then((db) => {
+                return db.collection(collection).findOne({_id: ObjectID(id)});
+            }).then((result) => {
+                resolve(result);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    //Crea un nuevo documento (Encadena promesas para obtener el resultado)
+    create(collection, data)
+    {
+        return new Promise((resolve, reject) => {
+            this.connect().then((db) => {
+                return db.collection(collection).insertOne(data);
+            }).then((result) => {
+                resolve(result.insertedId);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    //Actualiza un documento ya existente
+    update(collection, id, data)
+    {
+        return new Promise((resolve, reject) => {
+            this.connect().then((db) => {
+                return db.collection(collection).updateOne({_id: ObjectID(id)}, {$set: data}, {upsert: true});
+            }).then((result) => {
+                resolve(result.upsertedId || id);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    //Borra un documento
+    delete(collection, id)
+    {
+        return new Promise((resolve, reject) => {
+            this.connect().then((db) => {
+                return db.collection(collection).deleteOne({_id: ObjectID(id)});
+            }).then(() => {
+                resolve(id);
+            }).catch((error) => {
+                reject(error);
+            });
         });
     }
 }

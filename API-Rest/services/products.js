@@ -11,31 +11,65 @@ class ProductsService
 
     async getProducts({tags})
     {
-        const query = tags && {tags: {$in: tags}};
-        const products = await this.mongoDB.getAll(this.collection, query);
-        
-        //Si los productos no existen regresa un arreglo vacío
-        return products || [];
+        try
+        {
+            const query = tags && {tags: {$in: tags}};
+            const products = await this.mongoDB.getAll(this.collection, query);
+            
+            //Si los productos no existen regresa un arreglo vacío
+            return products || [];
+        }catch(error)
+        {
+            console.log(error);
+        }
     }
 
-    getProduct({id})
+    async getProduct({id})
     {
-        return Promise.resolve(productsMocks[0]);
+        try
+        {
+            const product = await this.mongoDB.get(this.collection, id);
+            return product || {};
+        }catch(error)
+        {
+            console.log(error);
+        }
     }
 
-    createProduct({product})
+    async createProduct({product})
     {
-        return Promise.resolve(productsMocks[0]);
+        try
+        {
+            const createID = await this.mongoDB.create(this.collection, product);
+            return createID;
+        }catch(error)
+        {
+            console.log(error);
+        }
     }
 
-    updateProduct({id, product})
+    async updateProduct({id, product})
     {
-        return Promise.resolve(productsMocks[0]);
+        try
+        {
+            const updateID = await this.mongoDB.update(this.collection, id, product);
+            return updateID;
+        }catch(error)
+        {
+            console.log(error);
+        }
     }
 
-    deleteProduct({id})
+    async deleteProduct({id})
     {
-        return Promise.resolve(productsMocks[0]);
+        try
+        {
+            const deleteID = await this.mongoDB.delete(this.collection, id);
+            return deleteID;
+        }catch(error)
+        {
+            console.log(error);
+        }
     }
 }
 
