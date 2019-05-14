@@ -3,7 +3,8 @@ const {config} = require('../config/index');
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
-const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@curso-platzi-i0uq0.mongodb.net/${config.dbName}?retryWrites=true`;
+//const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@curso-platzi-i0uq0.mongodb.net/${config.dbName}?retryWrites=true`;
+const MONGO_URI = `mongodb://${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
 class MongoLib
 {

@@ -11,6 +11,9 @@ router.get('/', async (request, respond, next) => {
 
     try
     {
+        //Simula un error para probar los handlers
+        // throw new Error('This is an error');
+
         const products = await productsService.getProducts({tags});
         respond.status(200).json({data: products, message: 'Products listed'});
 
