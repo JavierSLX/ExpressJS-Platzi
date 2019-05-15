@@ -13,7 +13,9 @@ function clientErrorHandler(error, request, response, next)
 {
     //Catch errors for AJAX request
     if(request.xhr)
+    {
         response.status(500).json({error: error});
+    }
     else
         next(error);
 }
@@ -24,8 +26,8 @@ function errorHandler(error, request, response, next)
     if(response.headersSent)
         next(error);
 
-    if(!config.dev)
-        delete error.stack;
+    // if(!config.dev)
+    //     delete error.stack;
 
     response.status(error.status || 500);
     response.send(error);
