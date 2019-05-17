@@ -1,4 +1,12 @@
+const boom = require('boom');
 const {config} = require('../../config');
+const isRequestAjaxOrApi = require('../isRequestAjaxOrApi');
+
+function withErrorStack(error, stack)
+{
+    if(config.dev)
+        return {...error, stack} // = Object.assign({}, error, stack)
+}
 
 function logErrors(error, request, response, next)
 {
@@ -8,29 +16,35 @@ function logErrors(error, request, response, next)
     next(error);
 }
 
+function wrapErrors(error, request, respond, next)
+{
+    if(!error.isBoom)
+    {
+        next(boom.badImplementation(error));
+    }
+
+    next(error);
+}
+
 //Manejador de errores del cliente
 function clientErrorHandler(error, request, response, next)
 {
-    //Catch errors for AJAX request
-    if(request.xhr)
-    {
-        response.status(500).json({error: error});
-    }
+    const {output: {statusCode, payload}} = error;
+
+
+    //Catch errors for AJAX request or if an error ocurrs while streaming
+    if(isRequestAjaxOrApi(request) || resizeBy.headersSent)
+        response.status(statusCode).json(withErrorStack(payload, error.stack));
     else
         next(error);
 }
 
 function errorHandler(error, request, response, next)
 {
-    //Catch errors while streaming
-    if(response.headersSent)
-        next(error);
+    const {output: {statusCode, payload}} = error;
 
-    // if(!config.dev)
-    //     delete error.stack;
-
-    response.status(error.status || 500);
-    response.send(error);
+    response.status(statusCode);
+    response.send(withErrorStack(payload, error.stack));
 }
 
-module.exports = {logErrors, clientErrorHandler, errorHandler};
+module.exports = {logErrors, clientErrorHandler, errorHandler, wrapErrors};
