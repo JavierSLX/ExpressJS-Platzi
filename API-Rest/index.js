@@ -4,6 +4,7 @@ const boom = require('boom');
 const productsApiRouter = require('./routes/api/products');
 const {logErrors, clientErrorHandler, errorHandler, wrapErrors} = require('./utils/middlewares/errorsHandlers');
 const isRequestAjaxOrApi = require('./utils/isRequestAjaxOrApi');
+const authApiRouter = require('./routes/api/auth');
 const app = express();
 
 //Permite procesas datos tipo JSON
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //Especifica las rutas de la API
 app.use('/api/products', productsApiRouter);
+app.use('/api/auth', authApiRouter);
 
 //Middleware con 404
 app.use((request, response, next) => {
