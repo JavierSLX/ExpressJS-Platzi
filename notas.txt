@@ -3,6 +3,8 @@ COMANDOS
 * npm i -S #paquete# => Instala y guarda el paquete requerido.
 * npm i express-generator -g => Instala el generador de express automatico de manera general.
 * express --view=pug #PROYECTO# => Crea de manera automatica un proyecto de express
+* passport passport-http passport-jwt jsonwebtoken bcrypt (Se instalaron los paquetes para la autenticación) además se instala 
+chalk como desarrollo (-D) para mostrar mensajes con colores en consola
 
 
 NOTAS
@@ -11,3 +13,4 @@ NOTAS
 * Conexion mongodb+srv://platzi:dVInC8vUvYqKafWn@curso-platzi-i0uq0.mongodb.net/octolion?retryWrites=true
 * Para leer los archivos .env se necesita instalar la libreria dotenv (Este ignora el archivo al momento de subirlo a GitHub)
 * Toda funcion que recibe una funcion asincrona debe de implementar tambien async/await
+* Para generar el JWT_SECRET se coloca en consola node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"

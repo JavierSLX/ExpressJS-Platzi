@@ -1,8 +1,12 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
 const ProductsService = require('../../services/products');
 const validate = require('../../utils/middlewares/validationHandler');
 const {productIdSchema, productTagSchema, createProductSchema, updateProductSchema} = require('../../utils/schemas/products');
+
+//JWT Strategy
+require('../../utils/auth/strategies/jwt');
 
 //Instanciamos el objeto
 const productsService = new ProductsService();
@@ -59,7 +63,8 @@ router.post('/', validate(createProductSchema), async (request, respond, next) =
 });
 
 //Valida el id y el cuerpo de la peticion (Revisa primero el id en los parametros y despues el cuerpo del objeto a actualizar)
-router.put('/:id', validate({id: productIdSchema}, "params"), validate(updateProductSchema), async (request, respond, next) => {
+router.put('/:id', passport.authenticate('jwt', {session: false}), validate({id: productIdSchema}, "params"), validate(updateProductSchema), async (request, respond, next) => {
+    
     const {id} = request.params;
     const {body: product} = request;
 
@@ -74,7 +79,7 @@ router.put('/:id', validate({id: productIdSchema}, "params"), validate(updatePro
     
 });
 
-router.delete('/:id', async (request, respond, next) => {
+router.delete('/:id', passport.authenticate('jwt', {session: false}), async (request, respond, next) => {
     const {id} = request.params;
     try
     {

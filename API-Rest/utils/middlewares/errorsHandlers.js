@@ -41,10 +41,11 @@ function clientErrorHandler(error, request, response, next)
 
 function errorHandler(error, request, response, next)
 {
-    const {output: {statusCode, payload}} = error;
+    // const {output: {statusCode, payload}} = error;
 
-    response.status(statusCode);
-    response.send(withErrorStack(payload, error.stack));
+    // response.status(statusCode);
+    // response.send(withErrorStack(payload, error.stack));
+    response.send(error.message)
 }
 
 module.exports = {logErrors, clientErrorHandler, errorHandler, wrapErrors};
